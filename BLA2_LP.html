@@ -163,9 +163,95 @@ body.ta [data-ta]{display:block}
 .il [data-ta]{display:none}
 body.ta .il [data-en]{display:none}
 body.ta .il [data-ta]{display:inline}
+
+/* ── DEMO BUTTON ───────────────────────────── */
+.btn-demo{background:transparent;border:1px solid rgba(0,255,136,.4);color:#00ff88;position:relative;overflow:hidden}
+.btn-demo::before{content:'';position:absolute;inset:0;background:rgba(0,255,136,.08)}
+.btn-demo:hover{background:rgba(0,255,136,.12);border-color:#00ff88;color:#00ff88;box-shadow:0 0 20px rgba(0,255,136,.2)}
+
+/* ── WELCOME POPUP ─────────────────────────── */
+.wp-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.wp-box{background:#0d1424;border:1px solid rgba(0,255,136,.2);border-radius:16px;padding:32px 28px;max-width:420px;width:100%;text-align:center;position:relative;animation:popIn .4s cubic-bezier(.23,1,.32,1)}
+@keyframes popIn{from{transform:scale(.88) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.wp-close{position:absolute;top:12px;right:14px;background:none;border:none;color:rgba(255,255,255,.35);font-size:20px;cursor:pointer;line-height:1;padding:4px;transition:color .2s}
+.wp-close:hover{color:#fff}
+.wp-icon{font-size:44px;margin-bottom:12px}
+.wp-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;color:#fff;margin-bottom:8px;letter-spacing:-.5px}
+.wp-title span{color:#00ff88}
+.wp-sub{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:24px}
+.wp-btns{display:flex;flex-direction:column;gap:10px}
+.wp-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);color:#00ff88;padding:4px 12px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+
+/* ── DEMO IFRAME MODAL ─────────────────────── */
+.dm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.dm-overlay.open{display:flex}
+.dm-inner{width:100%;max-width:900px;height:90vh;max-height:680px;background:#0a0f1e;border:1px solid rgba(0,255,136,.2);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;animation:popIn .35s cubic-bezier(.23,1,.32,1)}
+.dm-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(0,255,136,.06);border-bottom:1px solid rgba(0,255,136,.1);flex-shrink:0}
+.dm-bar-title{font-size:12px;font-weight:700;color:#00ff88;display:flex;align-items:center;gap:8px}
+.dm-bar-dots{display:flex;gap:5px}
+.dm-dot{width:9px;height:9px;border-radius:50%}
+.dm-close{background:none;border:none;color:rgba(255,255,255,.5);font-size:22px;cursor:pointer;line-height:1;padding:4px 8px;transition:color .2s;font-family:inherit}
+.dm-close:hover{color:#fff}
+.dm-iframe{flex:1;border:none;width:100%;background:#fff}
+.dm-loading{display:flex;align-items:center;justify-content:center;flex:1;color:rgba(255,255,255,.4);font-size:13px;flex-direction:column;gap:12px}
+.dm-spinner{width:32px;height:32px;border:2px solid rgba(0,255,136,.2);border-top-color:#00ff88;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dm-open-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:rgba(0,255,136,.6);border:1px solid rgba(0,255,136,.2);padding:6px 12px;border-radius:5px;text-decoration:none;transition:all .2s}
+.dm-open-btn:hover{color:#00ff88;border-color:#00ff88}
 </style>
 </head>
 <body>
+<!-- ══ WELCOME POPUP ══ -->
+<div class="wp-overlay" id="wpOverlay">
+  <div class="wp-box">
+    <button class="wp-close" onclick="closeWelcome()">✕</button>
+    <div class="wp-icon">📊</div>
+    <div class="wp-tag"><span style="width:6px;height:6px;background:#00ff88;border-radius:50%;display:inline-block;animation:blink 1s infinite"></span> Live Dashboard</div>
+    <div class="wp-title">Voter<span>Excel</span><br/>Dashboard</div>
+    <div class="wp-sub" data-en>See how our dashboard works — filter voters by booth, ward, age & gender. Fully interactive demo, no login needed.</div>
+    <div class="wp-sub" data-ta>எங்கள் டாஷ்போர்டு எவ்வாறு செயல்படுகிறது என்று பாருங்கள் — பூத், வார்டு, வயது மூலம் வாக்காளர்களை வடிகட்டுங்கள்.</div>
+    <div class="wp-btns">
+      <button class="btn btn-demo" style="justify-content:center;padding:13px;font-size:14px;width:100%" onclick="openDemo();closeWelcome()">
+        <span style="font-size:16px">👁</span>
+        <span data-en>View Live Demo Dashboard</span><span data-ta>லைவ் டெமோ பார்க்கவும்</span>
+      </button>
+      <button class="btn btn-g" style="justify-content:center;padding:13px;font-size:14px;width:100%" onclick="closeWelcome();document.getElementById('form').scrollIntoView({behavior:'smooth'})">
+        <span data-en>Order Now — ₹1/Voter</span><span data-ta>இப்போதே ஆர்டர் — ₹1/வாக்காளர்</span>
+      </button>
+      <button onclick="closeWelcome()" style="background:none;border:none;color:rgba(255,255,255,.3);font-size:12px;cursor:pointer;padding:4px;font-family:inherit" data-en>Skip for now →</button>
+      <button onclick="closeWelcome()" style="background:none;border:none;color:rgba(255,255,255,.3);font-size:12px;cursor:pointer;padding:4px;font-family:inherit" data-ta>தவிர்க்கவும் →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DEMO IFRAME MODAL ══ -->
+<div class="dm-overlay" id="demoModal">
+  <div class="dm-inner">
+    <div class="dm-bar">
+      <div class="dm-bar-dots">
+        <div class="dm-dot" style="background:#ff5f57"></div>
+        <div class="dm-dot" style="background:#febc2e"></div>
+        <div class="dm-dot" style="background:#28c840"></div>
+      </div>
+      <div class="dm-bar-title">
+        <span>📊</span>
+        <span data-en>VoterExcel Dashboard — Live Demo</span>
+        <span data-ta>VoterExcel டாஷ்போர்டு — லைவ் டெமோ</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <a href="https://digimafia.github.io/AImaster/Voter_Dash.html" target="_blank" class="dm-open-btn" title="Open in new tab">↗ <span data-en>Open Tab</span><span data-ta>புதிய தாள்</span></a>
+        <button class="dm-close" onclick="closeDemo()">✕</button>
+      </div>
+    </div>
+    <div id="demoLoading" class="dm-loading">
+      <div class="dm-spinner"></div>
+      <span data-en>Loading dashboard...</span><span data-ta>டாஷ்போர்டு ஏற்றுகிறது...</span>
+    </div>
+    <iframe id="demoFrame" class="dm-iframe" style="display:none" src="" onload="iframeLoaded()" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  </div>
+</div>
+
 <div id="cur"></div>
 <div class="kb" id="kb">
   <div class="kb-orb" style="width:500px;height:500px;top:-150px;right:-150px;background:radial-gradient(circle,rgba(0,255,136,.07),transparent 70%)"></div>
@@ -186,25 +272,19 @@ body.ta .il [data-ta]{display:inline}
 
 <nav>
   <div class="logo">Voter<span>Excel</span></div>
-  <div style="display:flex;align-items:center;gap:10px">
+  <div style="display:flex;align-items:center;gap:8px">
     <div class="lang-sw">
       <button class="lb on" onclick="setLang('en')">EN</button>
       <button class="lb" onclick="setLang('ta')">த</button>
     </div>
+    <button class="btn btn-demo" style="padding:9px 14px;font-size:12px" onclick="openDemo()">
+      <span style="font-size:13px">👁</span>
+      <span class="il"><span data-en>Demo</span><span data-ta>டெமோ</span></span>
+    </button>
     <a href="#form" class="btn btn-g" style="padding:9px 16px;font-size:13px">
       <svg style="width:14px;height:14px;fill:currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.505 3.927 1.395 5.594L.057 23.882l6.474-1.297A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.77 9.77 0 01-5.02-1.373l-.36-.213-3.722.745.758-3.624-.234-.373A9.77 9.77 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
       <span class="il"><span data-en>Order</span><span data-ta>ஆர்டர்</span></span>
     </a>
-    <a href="https://digimafia.github.io/AImaster/Voter_Dash.html" target="_blank" class="btn btn-g" style="padding:9px 16px;font-size:13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; background-color: #f1f1f1; border-radius: 5px; color: black; font-family: sans-serif;">
-  <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24">
-    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-  </svg>
-  
-  <span class="il">
-    <span data-en>Demo</span>
-    <span data-ta>டெமோ</span>
-  </span>
-</a>
   </div>
 </nav>
 
@@ -226,6 +306,7 @@ body.ta .il [data-ta]{display:inline}
         <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.505 3.927 1.395 5.594L.057 23.882l6.474-1.297A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.77 9.77 0 01-5.02-1.373l-.36-.213-3.722.745.758-3.624-.234-.373A9.77 9.77 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
         <span data-en>Order on WhatsApp</span><span data-ta>WhatsApp-ல் ஆர்டர்</span>
       </a>
+      <button class="btn btn-demo" onclick="openDemo()"><span style="font-size:15px">👁</span><span data-en>Live Demo</span><span data-ta>லைவ் டெமோ</span></button>
       <a href="#pricing" class="btn btn-o"><span data-en>See Pricing</span><span data-ta>விலை பார்க்க</span></a>
     </div>
     <div class="hero-stats">
@@ -305,16 +386,19 @@ body.ta .il [data-ta]{display:inline}
       <div class="price-card star sr">
         <div class="star-badge" data-en>⭐ Best Value</div><div class="star-badge" data-ta>⭐ சிறந்த மதிப்பு</div>
         <div class="urgency"><div class="u-dot"></div><span data-en>Limited Offer</span><span data-ta>வரையறுக்கப்பட்ட சலுகை</span></div>
-        <div class="price-name" data-en>Full Package</div><div class="price-name" data-ta>முழு தொகுப்பு</div>
-        <div class="price-amt"><sup>₹</sup>399</div>
-        <div class="price-unit" data-en>+ ₹1/voter · Dashboard included</div><div class="price-unit" data-ta>+ ₹1/வாக்காளர் · டாஷ்போர்டு சேர்க்கப்பட்டது</div>
+        <div class="price-name" data-en>Data + Dashboard</div><div class="price-name" data-ta>தரவு + டாஷ்போர்டு</div>
+        <div class="price-amt"><sup>₹</sup>1</div>
+        <div class="price-unit" data-en>per voter + optional ₹399 dashboard</div><div class="price-unit" data-ta>ஒரு வாக்காளருக்கு + விருப்பமான ₹399 டாஷ்போர்டு</div>
         <ul class="price-feats">
           <li data-en>Everything in Basic</li><li data-ta>அடிப்படையில் உள்ளது அனைத்தும்</li>
-          <li data-en>Dashboard access</li><li data-ta>டாஷ்போர்டு அணுகல்</li>
+          <li><span data-en>Dashboard access <span style="background:rgba(0,255,136,.15);color:#00ff88;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700">OPTIONAL</span></span><span data-ta>டாஷ்போர்டு அணுகல் <span style="background:rgba(0,255,136,.15);color:#00ff88;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700">விருப்பமானது</span></span></li>
           <li data-en>Priority 12hr delivery</li><li data-ta>12 மணி முன்னுரிமை டெலிவரி</li>
           <li data-en>Dedicated WA support</li><li data-ta>அர்பணிக்கப்பட்ட WA ஆதரவு</li>
         </ul>
-        <a href="#form" class="btn btn-g" style="width:100%;justify-content:center"><span data-en>Get Full Package</span><span data-ta>முழு தொகுப்பு</span></a>
+        <div style="display:flex;gap:8px">
+          <a href="#form" class="btn btn-g" style="flex:1;justify-content:center"><span data-en>Order Now</span><span data-ta>ஆர்டர்</span></a>
+          <button class="btn btn-demo" style="padding:12px 14px" onclick="openDemo()" title="View Demo">👁</button>
+        </div>
       </div>
       <div class="price-card sr d2">
         <div class="urgency" style="color:#a5b4fc"><div class="u-dot" style="background:#6366f1"></div><span data-en>Bulk Discount</span><span data-ta>மொத்த தள்ளுபடி</span></div>
@@ -332,10 +416,18 @@ body.ta .il [data-ta]{display:inline}
     <div class="calc-box sr">
       <label data-en>🧮 Quick Price Estimate</label><label data-ta>🧮 விரைவு விலை மதிப்பீடு</label>
       <input class="calc-input" type="number" id="calcV" placeholder="Enter number of voters" min="1" oninput="doCalc()"/>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px;background:rgba(0,255,136,.04);border:1px solid rgba(0,255,136,.1);border-radius:6px">
+        <input type="checkbox" id="calcDash" onchange="doCalc()" style="width:16px;height:16px;accent-color:#00ff88;cursor:pointer;flex-shrink:0"/>
+        <label for="calcDash" style="font-size:12px;color:rgba(255,255,255,.6);cursor:pointer;line-height:1.4">
+          <span data-en>Add Dashboard Access <span style="color:#00ff88;font-weight:700">+₹399</span> <span style="font-size:10px;opacity:.6">(optional)</span></span>
+          <span data-ta>டாஷ்போர்டு சேர்க்கவும் <span style="color:#00ff88;font-weight:700">+₹399</span> <span style="font-size:10px;opacity:.6">(விருப்பமானது)</span></span>
+        </label>
+        <button class="btn btn-demo" style="padding:6px 10px;font-size:11px;margin-left:auto;flex-shrink:0" onclick="openDemo()">👁 <span data-en>Demo</span><span data-ta>டெமோ</span></button>
+      </div>
       <div class="calc-result" id="calcR">
         <div class="cr"><span data-en>Voter cost (₹1/voter)</span><span data-ta>வாக்காளர் செலவு</span><span id="cV">₹0</span></div>
-        <div class="cr"><span data-en>Dashboard access</span><span data-ta>டாஷ்போர்டு</span><span>₹399</span></div>
-        <div class="ct"><span data-en>Total</span><span data-ta>மொத்தம்</span><span id="cT">₹399</span></div>
+        <div class="cr" id="calcDashRow" style="display:none"><span data-en>Dashboard access</span><span data-ta>டாஷ்போர்டு</span><span>₹399</span></div>
+        <div class="ct"><span data-en>Total</span><span data-ta>மொத்தம்</span><span id="cT">₹0</span></div>
       </div>
     </div>
   </div>
@@ -367,10 +459,27 @@ body.ta .il [data-ta]{display:inline}
       <div class="fg"><label data-en>WhatsApp Number *</label><label data-ta>WhatsApp எண் *</label><input type="tel" id="fPhone" placeholder="10-digit mobile number"/></div>
       <div class="fg"><label data-en>Number of Voters *</label><label data-ta>வாக்காளர் எண்ணிக்கை *</label><input type="number" id="fVoters" placeholder="e.g. 1200" min="1" oninput="formCalc()"/></div>
       <div class="fg"><label data-en>Constituency / Area</label><label data-ta>தொகுதி / பகுதி</label><input type="text" id="fArea" placeholder="Optional"/></div>
+      <!-- Dashboard optional add-on -->
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:14px;background:rgba(0,255,136,.04);border:1px solid rgba(0,255,136,.12);border-radius:8px;margin-bottom:14px">
+        <input type="checkbox" id="fDash" onchange="formCalc()" style="width:17px;height:17px;accent-color:#00ff88;cursor:pointer;margin-top:2px;flex-shrink:0"/>
+        <div style="flex:1">
+          <label for="fDash" style="font-size:13px;font-weight:600;color:rgba(255,255,255,.8);cursor:pointer;display:block;margin-bottom:3px">
+            <span data-en>Add Dashboard Access — <span style="color:#00ff88">+₹399</span></span>
+            <span data-ta>டாஷ்போர்டு சேர்க்கவும் — <span style="color:#00ff88">+₹399</span></span>
+            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin-left:6px;text-transform:uppercase" data-en>Optional</span>
+            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;margin-left:6px;text-transform:uppercase" data-ta>விருப்பமானது</span>
+          </label>
+          <div style="font-size:11px;color:rgba(255,255,255,.35);line-height:1.5">
+            <span data-en>Online order tracking, status updates & management panel</span>
+            <span data-ta>ஆன்லைன் ஆர்டர் கண்காணிப்பு, நிலை புதுப்பிப்புகள் & நிர்வாக பலகை</span>
+          </div>
+          <button class="btn btn-demo" style="padding:5px 10px;font-size:11px;margin-top:6px" onclick="openDemo()">👁 <span data-en>See Dashboard Demo</span><span data-ta>டாஷ்போர்டு டெமோ</span></button>
+        </div>
+      </div>
       <div class="f-preview" id="fPrev">
-        <div class="fp-row"><span data-en>Voter cost</span><span data-ta>வாக்காளர் செலவு</span><span id="fpV">₹0</span></div>
-        <div class="fp-row"><span data-en>Dashboard</span><span data-ta>டாஷ்போர்டு</span><span>₹399</span></div>
-        <div class="fp-total"><span data-en>Total Payable</span><span data-ta>மொத்தம்</span><span id="fpT">₹399</span></div>
+        <div class="fp-row"><span data-en>Voter data (₹1/voter)</span><span data-ta>வாக்காளர் தரவு</span><span id="fpV">₹0</span></div>
+        <div class="fp-row" id="fpDashRow" style="display:none"><span data-en>Dashboard access</span><span data-ta>டாஷ்போர்டு</span><span>₹399</span></div>
+        <div class="fp-total"><span data-en>Total Payable</span><span data-ta>மொத்தம்</span><span id="fpT">₹0</span></div>
       </div>
       <button onclick="sendToWhatsApp()" class="btn btn-g" style="width:100%;justify-content:center;padding:15px;font-size:15px">
         <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.505 3.927 1.395 5.594L.057 23.882l6.474-1.297A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.77 9.77 0 01-5.02-1.373l-.36-.213-3.722.745.758-3.624-.234-.373A9.77 9.77 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
@@ -394,11 +503,25 @@ body.ta .il [data-ta]{display:inline}
         <div class="pay-upi">sherifthe6-1@okaxis</div>
         <div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:4px" data-en>GPay · PhonePe · Paytm · Any UPI</div>
         <div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:4px" data-ta>GPay · PhonePe · Paytm · எந்த UPI</div>
+        <!-- Live bill amount from form -->
+        <div id="payAmtBox" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);border-radius:6px">
+          <div style="font-size:10px;color:rgba(0,255,136,.6);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px" data-en>Amount to Pay</div>
+          <div style="font-size:10px;color:rgba(0,255,136,.6);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px" data-ta>செலுத்த வேண்டிய தொகை</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#00ff88" id="payAmtDisplay">₹0</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px" data-en>based on your order form above</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px" data-ta>மேலே உள்ள ஆர்டர் படிவத்தின் படி</div>
+        </div>
+        <div id="payAmtEmpty" style="margin-top:8px;font-size:11px;color:rgba(255,255,255,.25)" data-en>← Fill order form above to auto-set amount</div>
+        <div id="payAmtEmptyTa" style="margin-top:8px;font-size:11px;color:rgba(255,255,255,.25);display:none" data-ta>← மேலே படிவத்தை நிரப்பவும், தொகை தானாக அமைக்கப்படும்</div>
       </div>
-      <a href="upi://pay?pa=sherifthe6-1@okaxis&pn=VoterService&cu=INR" class="btn-gpay">
-        <span class="g-color">G</span>
-        <span data-en>Pay via GPay</span><span data-ta>GPay மூலம் செலுத்து</span>
-      </a>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+        <a id="gpayBtn" href="upi://pay?pa=sherifthe6-1@okaxis&pn=VoterService&cu=INR" class="btn-gpay">
+          <span class="g-color">G</span>
+          <span data-en>Pay via GPay</span><span data-ta>GPay மூலம் செலுத்து</span>
+        </a>
+        <div style="font-size:10px;color:rgba(255,255,255,.25);text-align:center" data-en>Amount auto-sets from form</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.25);text-align:center" data-ta>படிவத்திலிருந்து தொகை தானாக</div>
+      </div>
     </div>
     <p style="font-size:11px;color:rgba(255,255,255,.3);margin-top:10px;text-align:center" data-en>After payment, send screenshot to WhatsApp: +91 86674 91936</p>
     <p style="font-size:11px;color:rgba(255,255,255,.3);margin-top:10px;text-align:center" data-ta>கட்டணத்திற்குப் பிறகு WhatsApp-ல் ஸ்கிரீன்ஷாட்: +91 86674 91936</p>
@@ -420,6 +543,12 @@ body.ta .il [data-ta]{display:inline}
           <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.505 3.927 1.395 5.594L.057 23.882l6.474-1.297A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.77 9.77 0 01-5.02-1.373l-.36-.213-3.722.745.758-3.624-.234-.373A9.77 9.77 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
           <span data-en>Order on WhatsApp</span><span data-ta>WhatsApp-ல் ஆர்டர்</span>
         </a>
+      </div>
+      <div style="margin-top:12px">
+        <button class="btn btn-demo" style="padding:11px 24px;font-size:13px" onclick="openDemo()">
+          <span style="font-size:15px">👁</span>
+          <span data-en>View Dashboard Demo First</span><span data-ta>முதலில் டாஷ்போர்டு பார்க்கவும்</span>
+        </button>
       </div>
       <div style="margin-top:16px;font-size:13px;color:rgba(255,255,255,.4)">+91 86674 91936</div>
     </div>
@@ -445,6 +574,7 @@ document.querySelectorAll('a,button,.sol-card,.prob-card,.price-card,.trust-item
 });
 window.addEventListener('touchstart',()=>cur.style.display='none',{once:true});
 
+/* ── KINETIC LINES ── */
 (function(){
   const kb=document.getElementById('kb');
   function makeLine(){
@@ -460,6 +590,7 @@ window.addEventListener('touchstart',()=>cur.style.display='none',{once:true});
   for(let i=0;i<12;i++)makeLine();
 })();
 
+/* ── COUNTDOWN ── */
 (function(){
   const KEY='vex_cd';let exp=localStorage.getItem(KEY);
   if(!exp||Date.now()>+exp){exp=Date.now()+23*3600000+59*60000+47000;localStorage.setItem(KEY,exp);}
@@ -473,42 +604,141 @@ window.addEventListener('touchstart',()=>cur.style.display='none',{once:true});
   }tick();
 })();
 
+/* ── LANGUAGE ── */
 let lang='en';
 function setLang(l){
   lang=l;document.body.classList.toggle('ta',l==='ta');
   document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
   document.querySelector(`.lb[onclick="setLang('${l}')"]`).classList.add('on');
+  // toggle UPI empty hint visibility
+  document.getElementById('payAmtEmpty').style.display = l==='ta'?'none':'block';
+  document.getElementById('payAmtEmptyTa').style.display = l==='ta'?'block':'none';
 }
 
+/* ── WELCOME POPUP ── */
+function closeWelcome(){
+  const el=document.getElementById('wpOverlay');
+  el.style.animation='fadeIn .3s ease reverse';
+  setTimeout(()=>el.remove(),280);
+}
+// Show popup after 800ms on load
+setTimeout(()=>{
+  const el=document.getElementById('wpOverlay');
+  if(el) el.style.display='flex';
+},800);
+
+/* ── DEMO MODAL ── */
+function openDemo(){
+  const modal=document.getElementById('demoModal');
+  const frame=document.getElementById('demoFrame');
+  const loading=document.getElementById('demoLoading');
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+  // lazy-load iframe
+  if(!frame.src||frame.src==='about:blank'||frame.src===''){
+    loading.style.display='flex';
+    frame.style.display='none';
+    frame.src='https://digimafia.github.io/AImaster/Voter_Dash.html';
+  }
+}
+function closeDemo(){
+  document.getElementById('demoModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function iframeLoaded(){
+  document.getElementById('demoLoading').style.display='none';
+  document.getElementById('demoFrame').style.display='block';
+}
+// Close demo on overlay click
+document.getElementById('demoModal').addEventListener('click',function(e){
+  if(e.target===this) closeDemo();
+});
+// ESC closes modals
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeDemo();const wp=document.getElementById('wpOverlay');if(wp)closeWelcome();}
+});
+
+/* ── BILL TOTAL HELPER ── */
+let currentBill=0;
+function getBill(voters, dashChecked){
+  return parseInt(voters||0) + (dashChecked ? 399 : 0);
+}
+
+/* ── UPDATE UPI GPAY LINK ── */
+function updateGpayLink(amount){
+  currentBill = amount;
+  const btn = document.getElementById('gpayBtn');
+  const amtBox = document.getElementById('payAmtBox');
+  const amtEmpty = document.getElementById('payAmtEmpty');
+  const amtEmptyTa = document.getElementById('payAmtEmptyTa');
+  const amtDisplay = document.getElementById('payAmtDisplay');
+  if(amount>0){
+    btn.href=`upi://pay?pa=sherifthe6-1@okaxis&pn=VoterService&am=${amount}&cu=INR&tn=VoterExcel`;
+    amtBox.style.display='block';
+    amtEmpty.style.display='none';
+    amtEmptyTa.style.display='none';
+    amtDisplay.textContent='₹'+amount.toLocaleString('en-IN');
+  } else {
+    btn.href='upi://pay?pa=sherifthe6-1@okaxis&pn=VoterService&cu=INR';
+    amtBox.style.display='none';
+    amtEmpty.style.display= lang==='ta' ? 'none' : 'block';
+    amtEmptyTa.style.display= lang==='ta' ? 'block' : 'none';
+  }
+}
+
+/* ── CALCULATOR ── */
 function doCalc(){
   const v=parseInt(document.getElementById('calcV').value)||0;
+  const dash=document.getElementById('calcDash').checked;
   const r=document.getElementById('calcR');
-  if(v>0){r.classList.add('show');document.getElementById('cV').textContent='₹'+v.toLocaleString('en-IN');document.getElementById('cT').textContent='₹'+(v+399).toLocaleString('en-IN');}
-  else r.classList.remove('show');
+  const dashRow=document.getElementById('calcDashRow');
+  if(v>0){
+    r.classList.add('show');
+    const total = getBill(v, dash);
+    document.getElementById('cV').textContent='₹'+v.toLocaleString('en-IN');
+    dashRow.style.display = dash ? 'flex' : 'none';
+    document.getElementById('cT').textContent='₹'+total.toLocaleString('en-IN');
+  } else r.classList.remove('show');
 }
 
+/* ── FORM LIVE CALC ── */
 function formCalc(){
   const v=parseInt(document.getElementById('fVoters').value)||0;
+  const dash=document.getElementById('fDash').checked;
   const p=document.getElementById('fPrev');
-  if(v>0){p.classList.add('show');document.getElementById('fpV').textContent='₹'+v.toLocaleString('en-IN');document.getElementById('fpT').textContent='₹'+(v+399).toLocaleString('en-IN');}
-  else p.classList.remove('show');
+  const dashRow=document.getElementById('fpDashRow');
+  if(v>0){
+    const total = getBill(v, dash);
+    p.classList.add('show');
+    dashRow.style.display = dash ? 'flex' : 'none';
+    document.getElementById('fpV').textContent='₹'+v.toLocaleString('en-IN');
+    document.getElementById('fpT').textContent='₹'+total.toLocaleString('en-IN');
+    updateGpayLink(total);
+  } else {
+    p.classList.remove('show');
+    updateGpayLink(0);
+  }
 }
 
+/* ── WHATSAPP SEND ── */
 function sendToWhatsApp(){
   const name=document.getElementById('fName').value.trim();
   const phone=document.getElementById('fPhone').value.trim();
   const voters=document.getElementById('fVoters').value.trim();
   const area=document.getElementById('fArea').value.trim();
+  const dash=document.getElementById('fDash').checked;
   if(!name){alert('Please enter your name.');return;}
   if(!phone){alert('Please enter your mobile number.');return;}
   if(!voters){alert('Please enter voter count.');return;}
-  const total=parseInt(voters)+399;
+  const total = getBill(parseInt(voters), dash);
+  const dashLine = dash ? (lang==='ta' ? '\nடாஷ்போர்டு: ஆம் (+₹399)' : '\nDashboard Access: Yes (+₹399)') : (lang==='ta' ? '\nடாஷ்போர்டு: வேண்டாம்' : '\nDashboard Access: No');
   const msg=lang==='ta'
-    ?`வணக்கம்! வாக்காளர் Excel சேவைக்கு ஆர்டர் செய்கிறேன்.\n\nபெயர்: ${name}\nமொபைல்: ${phone}\nவாக்காளர்கள்: ${voters}\nபகுதி: ${area||'குறிப்பிடவில்லை'}\nமொத்த செலவு: ₹${total}\n\nதயவுசெய்து உறுதிப்படுத்துங்கள்.`
-    :`Hi! I want Voter Excel conversion service.\n\nName: ${name}\nMobile: ${phone}\nVoters: ${voters}\nArea: ${area||'Not specified'}\nEstimated Cost: ₹${total}\n\nPlease confirm and proceed.`;
+    ?`வணக்கம்! வாக்காளர் Excel சேவைக்கு ஆர்டர் செய்கிறேன்.\n\nபெயர்: ${name}\nமொபைல்: ${phone}\nவாக்காளர்கள்: ${voters}\nபகுதி: ${area||'குறிப்பிடவில்லை'}${dashLine}\nமொத்த தொகை: ₹${total}\n\nதயவுசெய்து உறுதிப்படுத்துங்கள்.`
+    :`Hi! I want Voter Excel conversion service.\n\nName: ${name}\nMobile: ${phone}\nVoters: ${voters}\nArea: ${area||'Not specified'}${dashLine}\nTotal Amount: ₹${total}\n\nPlease confirm and proceed.`;
   window.open('https://wa.me/918667491936?text='+encodeURIComponent(msg),'_blank');
 }
 
+/* ── SCROLL REVEAL ── */
 const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});},{threshold:.12});
 document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
 window.addEventListener('scroll',()=>{document.querySelector('nav').style.boxShadow=window.scrollY>20?'0 4px 24px rgba(0,255,136,.06)':'none'},{passive:true});
